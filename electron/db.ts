@@ -278,5 +278,47 @@ export const dbOps = {
             totalDeductible: deductible.total || 0,
             balance: (income.total || 0) - (expenses.total || 0)
         };
+    },
+
+    getCategorySummary: (month?: number, year?: number) => {
+        let whereClause = "WHERE t.type = 'expense'";
+        const params: string[] = [];
+
+        if (year) {
+            whereClause += ` AND strftime('%Y', t.date) = ?`;
+            params.push(year.toString());
+            if (month) {
+                whereClause += ` AND strftime('%m', t.date) = ?`;
+                params.push(month.toString().padStart(2, '0'));
+            }
+        }
+
+        const sql = `
+            SELECT 
+                c.name as category_name,
+                SUM(t.amount) as total,
+                c.is_business
+            FROM transactions t
+            LEFT JOIN categories c ON t.category_id = c.id
+            ${whereClause}
+            GROUP BY c.id
+            ORDER BY total DESC
+        `;
+
+        return db.prepare(sql).all(...params);
+    },
+
+    getYearlyTrend: (year: number) => {
+        const sql = `
+            SELECT 
+                strftime('%m', date) as month,
+                SUM(CASE WHEN type = 'income' THEN amount ELSE 0 END) as income,
+                SUM(CASE WHEN type = 'expense' THEN amount ELSE 0 END) as expenses
+            FROM transactions
+            WHERE strftime('%Y', date) = ?
+            GROUP BY month
+            ORDER BY month ASC
+        `;
+        return db.prepare(sql).all(year.toString());
     }
 };

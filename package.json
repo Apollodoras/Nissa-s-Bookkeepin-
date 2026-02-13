@@ -1,11 +1,14 @@
 {
   "name": "nissa-bookkeeping",
   "private": true,
-  "version": "0.0.0",
+  "version": "1.1.0",
+  "author": "Apollodoras",
+  "description": "Professional bookkeeping for Sole Proprietors & Service Businesses",
   "main": "dist-electron/main.js",
   "scripts": {
     "dev": "concurrently -k \"npm run electron:build -- --watch\" \"vite\" \"wait-on tcp:5173 && cross-env VITE_DEV_SERVER_URL=http://localhost:5173 npm run electron\"",
     "build": "npm run electron:build && vite build && electron-builder",
+    "build:win": "npm run electron:build && vite build && electron-builder --win",
     "electron": "electron .",
     "electron:build": "tsc -p electron/tsconfig.json",
     "lint": "eslint .",
@@ -14,15 +17,32 @@
   "build": {
     "appId": "com.nissabookkeeping.app",
     "productName": "Nissa's Bookkeepin'",
+    "copyright": "Copyright © 2026 Apollodoras",
     "files": [
       "dist/**/*",
-      "dist-electron/**/*"
+      "dist-electron/**/*",
+      "assets/**/*"
     ],
     "directories": {
       "output": "release"
     },
     "win": {
-      "target": "nsis"
+      "target": [
+        {
+          "target": "nsis",
+          "arch": [
+            "x64"
+          ]
+        }
+      ],
+      "icon": null
+    },
+    "nsis": {
+      "oneClick": true,
+      "allowToChangeInstallationDirectory": false,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true,
+      "shortcutName": "Nissa's Bookkeepin'"
     }
   },
   "dependencies": {

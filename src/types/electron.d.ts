@@ -9,6 +9,8 @@ export interface IElectronAPI {
         getCategories: () => Promise<any[]>;
         addCategory: (category: { name: string; type: string; isDefaultDeductible: boolean }) => Promise<any>;
         getSummary: (filters?: { month?: number, year?: number }) => Promise<{ totalIncome: number, totalExpenses: number, totalDeductible: number, balance: number }>;
+        getCategorySummary: (filters?: { month?: number, year?: number }) => Promise<any[]>;
+        getYearlyTrend: (filters: { year: number }) => Promise<any[]>;
         exportCSV: (data: string, filename: string) => Promise<boolean>;
     };
 }

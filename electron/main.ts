@@ -42,6 +42,8 @@ app.whenReady().then(() => {
     ipcMain.handle('db:getCategories', () => dbOps.getCategories());
     ipcMain.handle('db:addCategory', (_, { name, type, isDefaultDeductible }) => dbOps.addCategory(name, type, isDefaultDeductible));
     ipcMain.handle('db:getSummary', (_, { month, year } = {}) => dbOps.getSummary(month, year));
+    ipcMain.handle('db:getCategorySummary', (_, { month, year } = {}) => dbOps.getCategorySummary(month, year));
+    ipcMain.handle('db:getYearlyTrend', (_, { year }) => dbOps.getYearlyTrend(year));
 
     ipcMain.handle('app:exportCSV', async (_, { data, filename }) => {
         const { filePath } = await dialog.showSaveDialog({

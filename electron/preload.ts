@@ -14,6 +14,8 @@ contextBridge.exposeInMainWorld('electron', {
         getCategories: () => ipcRenderer.invoke('db:getCategories'),
         addCategory: (category: any) => ipcRenderer.invoke('db:addCategory', category),
         getSummary: (filters?: { month?: number, year?: number }) => ipcRenderer.invoke('db:getSummary', filters),
+        getCategorySummary: (filters?: { month?: number, year?: number }) => ipcRenderer.invoke('db:getCategorySummary', filters),
+        getYearlyTrend: (filters: { year: number }) => ipcRenderer.invoke('db:getYearlyTrend', filters),
         exportCSV: (data: string, filename: string) => ipcRenderer.invoke('app:exportCSV', { data, filename }),
     },
 });

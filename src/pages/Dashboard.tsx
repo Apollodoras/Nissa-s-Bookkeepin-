@@ -14,6 +14,12 @@ export const Dashboard: React.FC = () => {
         totalDeductible: 0,
         balance: 0
     });
+    const [yearlySummary, setYearlySummary] = useState<SummaryData>({
+        totalIncome: 0,
+        totalExpenses: 0,
+        totalDeductible: 0,
+        balance: 0
+    });
 
     const [year, setYear] = useState<number>(new Date().getFullYear());
     const [month, setMonth] = useState<number>(new Date().getMonth() + 1);
@@ -21,7 +27,9 @@ export const Dashboard: React.FC = () => {
     const loadData = async () => {
         try {
             const data = await window.electron.ipcRenderer.getSummary({ month, year });
+            const yearlyData = await window.electron.ipcRenderer.getSummary({ year });
             setSummary(data);
+            setYearlySummary(yearlyData);
         } catch (error) {
             console.error("Failed to load summary", error);
         }
@@ -70,22 +78,46 @@ export const Dashboard: React.FC = () => {
                 </div>
             </div>
 
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: '20px', marginTop: '30px' }}>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '20px', marginTop: '30px' }}>
                 <div className="glass-panel" style={{ padding: '20px' }}>
-                    <h3 style={{ margin: 0, color: 'var(--text-muted)', fontSize: '0.9rem' }}>Current Balance</h3>
-                    <p style={{ fontSize: '2rem', margin: '10px 0', fontWeight: 'bold' }}>{formatCurrency(summary.balance)}</p>
+                    <h3 style={{ margin: 0, color: 'var(--text-muted)', fontSize: '0.9rem' }}>Monthly Balance</h3>
+                    <p style={{ fontSize: '1.8rem', margin: '10px 0', fontWeight: 'bold' }}>{formatCurrency(summary.balance)}</p>
                 </div>
                 <div className="glass-panel" style={{ padding: '20px' }}>
-                    <h3 style={{ margin: 0, color: 'var(--text-muted)', fontSize: '0.9rem' }}>Total Income</h3>
-                    <p style={{ fontSize: '2rem', margin: '10px 0', color: 'var(--color-primary)' }}>{formatCurrency(summary.totalIncome)}</p>
+                    <h3 style={{ margin: 0, color: 'var(--text-muted)', fontSize: '0.9rem' }}>Monthly Income</h3>
+                    <p style={{ fontSize: '1.8rem', margin: '10px 0', color: 'var(--color-primary)' }}>{formatCurrency(summary.totalIncome)}</p>
                 </div>
                 <div className="glass-panel" style={{ padding: '20px' }}>
-                    <h3 style={{ margin: 0, color: 'var(--text-muted)', fontSize: '0.9rem' }}>Total Expenses</h3>
-                    <p style={{ fontSize: '2rem', margin: '10px 0', color: '#ff4d4d' }}>{formatCurrency(summary.totalExpenses)}</p>
+                    <h3 style={{ margin: 0, color: 'var(--text-muted)', fontSize: '0.9rem' }}>Monthly Expenses</h3>
+                    <p style={{ fontSize: '1.8rem', margin: '10px 0', color: '#ff4d4d' }}>{formatCurrency(summary.totalExpenses)}</p>
                 </div>
                 <div className="glass-panel" style={{ padding: '20px' }}>
-                    <h3 style={{ margin: 0, color: 'var(--text-muted)', fontSize: '0.9rem' }}>Tax Deductible</h3>
-                    <p style={{ fontSize: '2rem', margin: '10px 0', color: 'var(--color-secondary)' }}>{formatCurrency(summary.totalDeductible)}</p>
+                    <h3 style={{ margin: 0, color: 'var(--text-muted)', fontSize: '0.9rem' }}>Monthly Deductible</h3>
+                    <p style={{ fontSize: '1.8rem', margin: '10px 0', color: 'var(--color-secondary)' }}>{formatCurrency(summary.totalDeductible)}</p>
+                </div>
+            </div>
+
+            <div style={{ marginTop: '40px' }}>
+                <h2 className="text-gradient" style={{ fontSize: '1.25rem', marginBottom: '20px' }}>Year-to-Date Performance ({year})</h2>
+                <div className="glass-panel" style={{ padding: '30px' }}>
+                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '30px' }}>
+                        <div>
+                            <span style={{ color: 'var(--text-muted)', fontSize: '0.9rem' }}>Cumulative Revenue</span>
+                            <p style={{ fontSize: '1.5rem', fontWeight: 'bold', margin: '5px 0', color: 'var(--color-primary)' }}>{formatCurrency(yearlySummary.totalIncome)}</p>
+                        </div>
+                        <div>
+                            <span style={{ color: 'var(--text-muted)', fontSize: '0.9rem' }}>Cumulative Expenses</span>
+                            <p style={{ fontSize: '1.5rem', fontWeight: 'bold', margin: '5px 0', color: '#ff4d4d' }}>{formatCurrency(yearlySummary.totalExpenses)}</p>
+                        </div>
+                        <div>
+                            <span style={{ color: 'var(--text-muted)', fontSize: '0.9rem' }}>Cumulative Tax Savings</span>
+                            <p style={{ fontSize: '1.5rem', fontWeight: 'bold', margin: '5px 0', color: 'var(--color-secondary)' }}>{formatCurrency(yearlySummary.totalDeductible)}</p>
+                        </div>
+                        <div style={{ borderLeft: '1px solid rgba(15, 23, 42, 0.05)', paddingLeft: '30px' }}>
+                            <span style={{ color: 'var(--text-muted)', fontSize: '0.9rem' }}>Net Profit</span>
+                            <p className="text-gradient" style={{ fontSize: '1.8rem', fontWeight: 'bold', margin: '5px 0' }}>{formatCurrency(yearlySummary.balance)}</p>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>

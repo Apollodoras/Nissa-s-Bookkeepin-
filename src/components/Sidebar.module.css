@@ -1,0 +1,68 @@
+.sidebar {
+    width: 260px;
+    height: 100vh;
+    background: var(--bg-panel);
+    border-right: var(--glass-border);
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+.logo {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    margin-bottom: 40px;
+    color: var(--color-primary);
+}
+
+.logoIcon {
+    filter: drop-shadow(0 0 8px var(--color-primary-glow));
+}
+
+.logo h1 {
+    margin: 0;
+    font-size: 1.2rem;
+    line-height: 1.2;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    color: var(--text-main);
+}
+
+.nav {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    flex: 1;
+}
+
+.link {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 16px;
+    border-radius: 8px;
+    color: var(--text-muted);
+    text-decoration: none;
+    transition: all 0.2s;
+    font-weight: 500;
+}
+
+.link:hover {
+    background: rgba(15, 23, 42, 0.04);
+    color: var(--text-main);
+}
+
+.active {
+    background: var(--color-primary-glow);
+    color: var(--color-primary);
+    border: 1px solid rgba(14, 165, 233, 0.1);
+    box-shadow: 0 2px 10px rgba(14, 165, 233, 0.05);
+}
+
+.footer {
+    margin-top: auto;
+    padding-top: 20px;
+    border-top: 1px solid rgba(15, 23, 42, 0.05);
+}

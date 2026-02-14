@@ -4,9 +4,8 @@ Professional bookkeeping for Sole Proprietors & Service Businesses (Exclusively 
 
 ## How to Install (Windows)
 
-1. **Download**: Download the **Verified Windows Installer** from the [GitHub Actions Page](https://github.com/Apollodoras/Nissa-s-Bookkeepin-/actions/workflows/build.yml).
-   - Click the latest "green" run.
-   - Scroll down to **Artifacts** and download `windows-installer`.
+1. **Download**: Download the latest verified installer from the [Official Releases Page](https://github.com/Apollodoras/Nissa-s-Bookkeepin-/releases/latest).
+   - Look for the `.exe` file under **Assets** and click it to download.
 2. **Run**: Double-click the `.exe` file. 
 3. **Smart Setup**: The app will automatically install and create a desktop shortcut.
 4. **Data Privacy**: Your database is created locally on your machine. No data ever leaves your computer.

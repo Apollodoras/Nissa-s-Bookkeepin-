@@ -18,8 +18,6 @@
     "appId": "com.nissabookkeeping.app",
     "productName": "Nissa's Bookkeepin'",
     "copyright": "Copyright © 2026 Apollodoras",
-    "npmRebuild": true,
-    "buildDependenciesFromSource": false,
     "asarUnpack": [
       "**/*.node"
     ],

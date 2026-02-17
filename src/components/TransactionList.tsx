@@ -46,7 +46,7 @@ export const TransactionList: React.FC<Props> = ({ transactions, onDelete, onEdi
                     <div>
                         <span className={styles.category}>{t.category_name || "Uncategorized"}</span>
                         {!t.is_business && <span className={styles.category} style={{ marginLeft: '5px', background: '#e2e8f0' }}>Personal</span>}
-                        {t.is_tax_deductible && <span className={styles.category} style={{ marginLeft: '5px', color: 'var(--color-secondary)' }}>Tax Ded.</span>}
+                        {t.is_tax_deductible && t.type === 'expense' && <span className={styles.category} style={{ marginLeft: '5px', color: 'var(--color-secondary)' }}>Tax Ded.</span>}
                     </div>
                     <div className={`${styles.amount} ${t.type === 'income' ? styles.incomeAmount : styles.expenseAmount}`}>
                         {t.type === 'income' ? '+' : '-'}{formatCurrency(t.amount)}

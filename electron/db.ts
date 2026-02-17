@@ -178,6 +178,10 @@ export function initDb() {
             db.prepare("UPDATE transactions SET is_business = 0, category_id = NULL WHERE category_id = ?").run(personalCat.id);
             db.prepare("DELETE FROM categories WHERE id = ?").run(personalCat.id);
         }
+
+        // Migration: Ensure no income categories are deductible
+        db.prepare("UPDATE categories SET is_default_tax_deductible = 0 WHERE type = 'income'").run();
+        db.prepare("UPDATE transactions SET is_tax_deductible = 0 WHERE type = 'income'").run();
     } catch (error) {
         console.error('Database initialization failed:', error);
         // On dev, you might want to see this error more clearly
@@ -249,8 +253,24 @@ export const dbOps = {
 
     addCategory: (name: string, type: string, isDefaultDeductible: boolean, isBusiness: boolean = true) => {
         const id = uuidv4();
-        db.prepare('INSERT INTO categories (id, name, type, is_default_tax_deductible, is_business) VALUES (?, ?, ?, ?, ?)').run(id, name, type, isDefaultDeductible ? 1 : 0, isBusiness ? 1 : 0);
-        return { id, name, type, is_default_tax_deductible: isDefaultDeductible, is_business: isBusiness ? 1 : 0 };
+        const dedValue = type === 'income' ? 0 : (isDefaultDeductible ? 1 : 0);
+        db.prepare('INSERT INTO categories (id, name, type, is_default_tax_deductible, is_business) VALUES (?, ?, ?, ?, ?)').run(id, name, type, dedValue, isBusiness ? 1 : 0);
+        return { id, name, type, is_default_tax_deductible: dedValue, is_business: isBusiness ? 1 : 0 };
+    },
+
+    updateCategory: (c: { id: string, name: string, type: string, is_default_tax_deductible: number, is_business: number }) => {
+        const dedValue = c.type === 'income' ? 0 : c.is_default_tax_deductible;
+        return db.prepare(`
+            UPDATE categories 
+            SET name = ?, type = ?, is_default_tax_deductible = ?, is_business = ?
+            WHERE id = ?
+        `).run(c.name, c.type, dedValue, c.is_business, c.id);
+    },
+
+    deleteCategory: (id: string) => {
+        // First null out category references in transactions
+        db.prepare('UPDATE transactions SET category_id = NULL WHERE category_id = ?').run(id);
+        return db.prepare('DELETE FROM categories WHERE id = ?').run(id);
     },
 
     getSummary: (month?: number, year?: number) => {

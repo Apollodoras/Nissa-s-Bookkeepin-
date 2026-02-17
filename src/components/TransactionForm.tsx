@@ -114,7 +114,15 @@ export const TransactionForm: React.FC<Props> = ({ onClose, onSave, initialData 
                                 className="input-field"
                                 style={{ width: '100%' }}
                                 value={formData.type}
-                                onChange={e => setFormData({ ...formData, type: e.target.value as 'income' | 'expense', category_id: '' })}
+                                onChange={e => {
+                                    const newType = e.target.value as 'income' | 'expense';
+                                    setFormData({
+                                        ...formData,
+                                        type: newType,
+                                        category_id: '',
+                                        is_tax_deductible: newType === 'income' ? false : formData.is_tax_deductible
+                                    });
+                                }}
                             >
                                 <option value="income">Income</option>
                                 <option value="expense">Expense</option>

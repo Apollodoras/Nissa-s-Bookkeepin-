@@ -13,6 +13,8 @@ contextBridge.exposeInMainWorld('electron', {
         updateTransaction: (transaction: any) => ipcRenderer.invoke('db:updateTransaction', transaction),
         getCategories: () => ipcRenderer.invoke('db:getCategories'),
         addCategory: (category: any) => ipcRenderer.invoke('db:addCategory', category),
+        updateCategory: (category: any) => ipcRenderer.invoke('db:updateCategory', category),
+        deleteCategory: (id: string) => ipcRenderer.invoke('db:deleteCategory', id),
         getSummary: (filters?: { month?: number, year?: number }) => ipcRenderer.invoke('db:getSummary', filters),
         getCategorySummary: (filters?: { month?: number, year?: number }) => ipcRenderer.invoke('db:getCategorySummary', filters),
         getYearlyTrend: (filters: { year: number }) => ipcRenderer.invoke('db:getYearlyTrend', filters),

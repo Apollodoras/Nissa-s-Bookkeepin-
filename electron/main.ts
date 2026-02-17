@@ -40,7 +40,9 @@ app.whenReady().then(() => {
     ipcMain.handle('db:deleteTransaction', (_, id) => dbOps.deleteTransaction(id));
     ipcMain.handle('db:updateTransaction', (_, t) => dbOps.updateTransaction(t));
     ipcMain.handle('db:getCategories', () => dbOps.getCategories());
-    ipcMain.handle('db:addCategory', (_, { name, type, isDefaultDeductible }) => dbOps.addCategory(name, type, isDefaultDeductible));
+    ipcMain.handle('db:addCategory', (_, { name, type, isDefaultDeductible, isBusiness }) => dbOps.addCategory(name, type, isDefaultDeductible, isBusiness));
+    ipcMain.handle('db:updateCategory', (_, category) => dbOps.updateCategory(category));
+    ipcMain.handle('db:deleteCategory', (_, id) => dbOps.deleteCategory(id));
     ipcMain.handle('db:getSummary', (_, { month, year } = {}) => dbOps.getSummary(month, year));
     ipcMain.handle('db:getCategorySummary', (_, { month, year } = {}) => dbOps.getCategorySummary(month, year));
     ipcMain.handle('db:getYearlyTrend', (_, { year }) => dbOps.getYearlyTrend(year));
